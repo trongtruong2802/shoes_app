@@ -1,0 +1,197 @@
+<div class=" box-shoe mt-100 ">
+    <div class="filter">
+        <div class="row">
+            <div class="col">
+                <p>Giày nữ</p>
+            </div>
+            <div class="col form-arrange" >
+                <form id="filterForm">
+                    <label for="category">Sắp xếp:</label>
+                    <select id="category">
+                        <option value="All">All</option>
+                        <option value="Down">Giá Từ Cao Xuống Thấp</option>
+                        <option value="Up">Giá Từ Thấp Lên Cao</option>
+                        <option value="AZ">Sắp Xếp Từ A -> Z</option>
+                        <option value="ZA">Sắp Xếp Từ Z -> A</option>
+                    </select>
+                </form>
+                <div class="row ">
+                <form class="form-search">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Tìm Kiếm" aria-label="Search">
+                </form>
+            </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="row" id="shoeContainer">
+        <div class="col-md-3 mt-5 ">
+            <div class="img">
+                <img class="img-fluid" src="/img/NUCG- G019.jpg" alt="" width="100%" height="">
+                <div class="caption">
+                    <a href="">
+                        <p id="Giày cao gót MWC NUCG- G018">Giày cao gót MWC NUCG- G018</p>
+                    </a>
+                    <h3 id="225">225.000 đ</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-5 ">
+            <div class="img">
+                <img class="img-fluid" src="/img/NUCG- G018.jpg" alt="" width="100%" height="">
+                <div class="caption">
+                    <a href="">
+                        <p id="Giày cao gót MWC NUCG- G019">Giày cao gót MWC NUCG- G019</p>
+                    </a>
+                    <h3 id="235">235.000 đ</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-5 ">
+            <div class="img">
+                <img class="img-fluid" src="/img/NUCG- G018.jpg" alt="" width="100%" height="">
+                <div class="caption">
+                    <a href="">
+                        <p id="Giày cao gót MWC NUCG- G019"> Giày cao gót MWC NUCG- G018</p>
+                    </a>
+                    <h3 id="255">255.000 đ</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-5 ">
+            <div class="img">
+                <img class="img-fluid" src="/img/NUCG- G018.jpg" alt="" width="100%" height="">
+                <div class="caption">
+                    <a href="">
+                        <p id="Giày cao gót MWC NUCG- G019">Giày cao gót MWC NUCG- G018</p>
+                    </a>
+                    <h3 id="235">235.000 đ</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-5 ">
+            <div class="img">
+                <img class="img-fluid" src="/img/NUCG- G018.jpg" alt="" width="100%" height="">
+                <div class="caption">
+                    <a href="">
+                        <p id="Giày cao gót MWC NUCG- G019">Giày cao gót MWC NUCG- G018</p>
+                    </a>
+                    <h3 id="235">235.000 đ</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-5 ">
+            <div class="img">
+                <img class="img-fluid" src="/img/NUCG- G018.jpg" alt="" width="100%" height="">
+                <div class="caption">
+                    <a href="">
+                        <p id="Giày cao gót MWC NUCG- G020">Giày cao gót MWC NUCG- G018</p>
+                    </a>
+                    <h3 id="235">235.000 đ</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const selectElement = document.getElementById('category');
+    const shoeContainer = document.getElementById('shoeContainer');
+
+    function sortByPrice(order) {
+        const shoes = Array.from(shoeContainer.children);
+
+        shoes.sort((a, b) => {
+            const priceA = parseInt(a.querySelector('h3').getAttribute('id'));
+            const priceB = parseInt(b.querySelector('h3').getAttribute('id'));
+
+            if (order === 'Down' || order === 'Up') {
+                return order === 'Down' ? priceB - priceA : priceA - priceB;
+            } else if (order === 'AZ' || order === 'ZA') {
+                const nameA = a.querySelector('p').textContent.toLowerCase();
+                const nameB = b.querySelector('p').textContent.toLowerCase();
+
+                if (order === 'AZ') {
+                    return nameA.localeCompare(nameB);
+                } else {
+                    return nameB.localeCompare(nameA);
+                }
+            }
+        });
+
+        // Clear existing shoe elements
+        while (shoeContainer.firstChild) {
+            shoeContainer.removeChild(shoeContainer.firstChild);
+        }
+
+        // Append sorted shoe elements
+        shoes.forEach(shoe => {
+            shoeContainer.appendChild(shoe);
+        });
+    }
+
+    selectElement.addEventListener('change', function () {
+        const selectedOption = this.value;
+        if (selectedOption === 'Down' || selectedOption === 'Up' || selectedOption === 'AZ' || selectedOption === 'ZA') {
+            sortByPrice(selectedOption);
+        }
+    });
+});
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchForm = document.querySelector('.form-search');
+    const shoeItems = document.querySelectorAll('.img');
+    const shoeContainer = document.getElementById('shoeContainer');
+
+    let originalOrder = Array.from(shoeItems);
+
+    function filterShoes(keyword) {
+        const lowerKeyword = keyword.toLowerCase();
+        shoeContainer.innerHTML = '';
+
+        originalOrder.forEach(shoe => {
+            const shoeName = shoe.querySelector('p').textContent.toLowerCase();
+            const shoeImgSrc = shoe.querySelector('img').getAttribute('src'); // Lấy đường dẫn của ảnh
+            if (shoeName.includes(lowerKeyword)) {
+                // Tạo lại cấu trúc html của sản phẩm bằng cách tạo các thẻ div, img, p và h3
+                const div = document.createElement('div');
+                div.classList.add('col-md-3', 'mt-5');
+                const img = document.createElement('img');
+                img.classList.add('img-fluid');
+                img.setAttribute('src', shoeImgSrc); // Sét lại đường dẫn cho ảnh
+                img.setAttribute('alt', '');
+                img.setAttribute('width', '100%');
+                const caption = document.createElement('div');
+                caption.classList.add('caption');
+                const a = document.createElement('a');
+                a.setAttribute('href', '');
+                const p = document.createElement('p');
+                p.textContent = shoe.querySelector('p').textContent; // Sử dụng lại tên sản phẩm gốc
+                const h3 = document.createElement('h3');
+                h3.textContent = shoe.querySelector('h3').textContent;
+                div.appendChild(img);
+                caption.appendChild(a);
+                a.appendChild(p);
+                caption.appendChild(h3);
+                div.appendChild(caption);
+                shoeContainer.appendChild(div);
+            }
+        });
+    }
+
+    searchForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const searchTerm = this.querySelector('input').value.trim();
+        filterShoes(searchTerm);
+    });
+
+    searchForm.addEventListener('input', function () {
+        const searchTerm = this.querySelector('input').value.trim();
+        filterShoes(searchTerm);
+    });
+});
+</script>
